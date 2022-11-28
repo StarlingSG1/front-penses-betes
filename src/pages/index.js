@@ -3,8 +3,8 @@ import logo from '../logo.svg';
 import '../App.css';
 import { Header } from '../components/molecules';
 import { useEffect, useState } from 'react';
-import { Button, Card, Input, Paragraph } from '../components/atoms';
-import { createWord, getWordsForUser } from '../api/words/words';
+import { Button, Card, Input, ModalCard, Paragraph } from '../components/atoms';
+import { createWord, deleteWord, getWordsForUser, updateWord } from '../api/words/words';
 import { getLanguages } from '../api/languages/languages';
 import { toast } from 'react-toastify';
 
@@ -17,6 +17,7 @@ export default function Home() {
 
     const [isOpen, setIsOpen] = useState(false);
     const [selectedWord, setSelectedWord] = useState('');
+    const [deleteModal, setDeleteModal] = useState(false);
 
     const [words, setWords] = useState([]);
     const [languages, setLanguages] = useState([]);
@@ -131,6 +132,31 @@ export default function Home() {
         console.log(language)
     }
 
+    const deleteTheWord = async (id) => {
+        const token = localStorage.getItem("penses-betes-token");
+        const response = await deleteWord({ id, token });
+        if (response.error === false) {
+            setWords(response.data);
+            toast.success(response.message)
+        } else {
+            toast.error(response.message)
+        }
+        setDeleteModal(false);
+        setWords(response.data);
+    }
+
+    const updateTheWord = async (id, word, definition, traduction) => {
+        const token = localStorage.getItem("penses-betes-token");
+        const response = await updateWord({ id, word, definition, traduction, token });
+        if (response.error === false) {
+            setWords(response.data);
+            toast.success(response.message)
+        } else {
+            toast.error(response.message)
+        }
+        setWords(response.data);
+    }
+
 
 
 
@@ -195,13 +221,15 @@ export default function Home() {
                                 </div>
                                 {words?.map((word, index) => (
                                     word?.name[0] === letter && word?.language?.id === wordsLanguage?.id && !wordsLanguage?.french ?
-                                        (<div key={index} onClick={() => { setSelectedWord(word); setIsOpen(true) }} className='w-full h-10 flex items-center cursor-pointer odd:bg-slate-200 px-[2.5%]'>
-                                            <p className='font-montserrat capitalize' >
+                                        (<div key={index}  className='w-full h-10 flex items-center odd:bg-slate-200 px-[2.5%] justify-between'>
+                                            <p className=' truncate font-montserrat capitalize w-3/4 sm:w-4/5 cursor-pointer' onClick={() => { setSelectedWord(word); setIsOpen(true) }} >
                                                 {word.name}</p>
+                                            <svg onClick={() => {setDeleteModal(true)}} className='text-primary z-20' width="20" height="20" viewBox="0 0 16 16"><path fill="currentColor" d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1l-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" /></svg>
                                         </div>) :
-                                        (word?.traduction[0] === letter && word?.language?.id === wordsLanguage?.id && wordsLanguage?.french && <div key={index} onClick={() => { setSelectedWord(word); setIsOpen(true) }} className='w-full h-10 flex items-center cursor-pointer odd:bg-slate-200 px-[2.5%]'>
-                                            <p className='font-montserrat capitalize' >
+                                        (word?.traduction[0] === letter && word?.language?.id === wordsLanguage?.id && wordsLanguage?.french && <div key={index}  className='w-full h-10 flex items-center odd:bg-slate-200 px-[2.5%] justify-between'>
+                                            <p className=' truncate font-montserrat capitalize w-3/4 sm:w-4/5 cursor-pointer'  onClick={() => { setSelectedWord(word); setIsOpen(true) }} >
                                                 {word?.traduction}</p>
+                                            <svg onClick={() => {setDeleteModal(true)}} className='text-primary z-20' width="20" height="20" viewBox="0 0 16 16"><path fill="currentColor" d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1l-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" /></svg>
                                         </div>
                                         )
                                 ))}
@@ -210,6 +238,15 @@ export default function Home() {
                     ))}
                 </div>
                 <Card item={selectedWord} isOpen={isOpen} setIsOpen={setIsOpen} />
+                <ModalCard  isOpen={deleteModal} setIsOpen={setDeleteModal}>
+                    <div className='w-full border-b border-primary pb-1'>
+                        <p className='font-montserrat'>Supprimer : <strong>{selectedWord?.name} ?</strong></p>
+                    </div>
+                    <div className='flex items-center justify-around mt-4 '>
+                        <button onClick={() => {setDeleteModal(false); setSelectedWord("")}} className='cursor-pointer px-5 py-1 rounded-lg underline'>Non</button>
+                        <Button onClick={() => {deleteTheWord(selectedWord?.id)}}>Oui</Button>
+                    </div>
+                </ModalCard>
             </main>
         </>
     );
