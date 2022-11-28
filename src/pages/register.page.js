@@ -28,7 +28,9 @@ export default function Register() {
         setLoading(true);
         if (userCredentials?.firstName !== "" && userCredentials?.lastName !== "" && userCredentials?.phone !== "" && userCredentials?.email !== "" && userCredentials?.password !== "" && userCredentials?.confirmPassword !== "" && userCredentials?.conditions) {
             if (userCredentials?.password === userCredentials?.confirmPassword) {
-                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
+                ;
+                
                 if (passwordRegex.test(userCredentials?.password)) {
                     const response = await registerUser(userCredentials);
                     if (response) {
