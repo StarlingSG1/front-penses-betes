@@ -92,7 +92,7 @@ export default function Home() {
         setSelectedLanguage(data);
         const myLanguage = data.find((language) => language.active === true);
         setWordsLanguage(myLanguage);
-        
+
     }
 
 
@@ -198,8 +198,8 @@ export default function Home() {
                                         (<div key={index} onClick={() => { setSelectedWord(word); setIsOpen(true) }} className='w-full h-10 flex items-center cursor-pointer odd:bg-slate-200 px-[2.5%]'>
                                             <p className='font-montserrat capitalize' >
                                                 {word.name}</p>
-                                        </div>) : 
-                                        ( word?.name[0] === letter && word?.language?.id === wordsLanguage?.id && wordsLanguage?.french && <div key={index} onClick={() => { setSelectedWord(word); setIsOpen(true) }} className='w-full h-10 flex items-center cursor-pointer odd:bg-slate-200 px-[2.5%]'>
+                                        </div>) :
+                                        (word?.traduction[0] === letter && word?.language?.id === wordsLanguage?.id && wordsLanguage?.french && <div key={index} onClick={() => { setSelectedWord(word); setIsOpen(true) }} className='w-full h-10 flex items-center cursor-pointer odd:bg-slate-200 px-[2.5%]'>
                                             <p className='font-montserrat capitalize' >
                                                 {word?.traduction}</p>
                                         </div>
