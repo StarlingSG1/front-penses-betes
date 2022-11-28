@@ -13,9 +13,9 @@ export function Header() {
       <div className="flex items-center gap-10">
         {user ?
           <>
-            <Link className="text-white cursor-pointer" to="/profile">
+            {/* <Link className="text-white cursor-pointer" to="/profile">
               Profil
-            </Link>
+            </Link> */}
             <Link className="text-white cursor-pointer" to="/logout">
               Deconnexion
             </Link>
