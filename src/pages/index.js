@@ -154,6 +154,7 @@ export default function Home() {
         const response = await updateWord({ id, name, definition, traduction, languageId, token });
         if (response.error === false) {
             setWords(response.data);
+            setEditModal(false);
             toast.success(response.message)
         } else {
             toast.error(response.message)
