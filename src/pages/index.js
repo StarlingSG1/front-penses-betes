@@ -3,7 +3,7 @@ import logo from '../logo.svg';
 import '../App.css';
 import { Header } from '../components/molecules';
 import { useEffect, useState } from 'react';
-import { Button, Card, Input, ModalCard, Paragraph } from '../components/atoms';
+import { Button, Card, Crayon, Input, ModalCard, Paragraph } from '../components/atoms';
 import { createWord, deleteWord, getWordsForUser, updateWord } from '../api/words/words';
 import { getLanguages } from '../api/languages/languages';
 import { toast } from 'react-toastify';
@@ -18,6 +18,7 @@ export default function Home() {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedWord, setSelectedWord] = useState('');
     const [deleteModal, setDeleteModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
 
     const [words, setWords] = useState([]);
     const [languages, setLanguages] = useState([]);
@@ -53,6 +54,7 @@ export default function Home() {
             const myValue = []
             langue.forEach((language) => myValue.push(language))
             setLanguages(myValue);
+            toast.success(response.message);
         } else {
             toast.error(response.message)
         }
@@ -145,9 +147,11 @@ export default function Home() {
         setWords(response.data);
     }
 
-    const updateTheWord = async (id, word, definition, traduction) => {
+    const updateTheWord = async (e,id, name, definition, traduction, languageId) => {
+        console.log(id, name, definition, traduction, languageId)
+        e.preventDefault();
         const token = localStorage.getItem("penses-betes-token");
-        const response = await updateWord({ id, word, definition, traduction, token });
+        const response = await updateWord({ id, name, definition, traduction, languageId, token });
         if (response.error === false) {
             setWords(response.data);
             toast.success(response.message)
@@ -221,15 +225,21 @@ export default function Home() {
                                 </div>
                                 {words?.map((word, index) => (
                                     word?.name[0] === letter && word?.language?.id === wordsLanguage?.id && !wordsLanguage?.french ?
-                                        (<div key={index}  className='w-full h-10 flex items-center odd:bg-slate-200 px-[2.5%] justify-between'>
+                                        (<div key={index} className='w-full h-10 flex items-center odd:bg-slate-200 px-[2.5%] justify-between'>
                                             <p className=' truncate font-montserrat capitalize w-3/4 sm:w-4/5 cursor-pointer' onClick={() => { setSelectedWord(word); setIsOpen(true) }} >
                                                 {word.name}</p>
-                                            <svg onClick={() => {setDeleteModal(true)}} className='text-primary z-20' width="20" height="20" viewBox="0 0 16 16"><path fill="currentColor" d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1l-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" /></svg>
+                                            <div className='flex items-center gap-5'>
+                                                <Crayon onClick={() => { setEditModal(true); setSelectedWord(word) }} className="text-primary cursor-pointer" />
+                                                <svg onClick={() => { setDeleteModal(true); setSelectedWord(word) }} className='text-primary cursor-pointer z-10' width="20" height="20" viewBox="0 0 16 16"><path fill="currentColor" d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1l-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" /></svg>
+                                            </div>
                                         </div>) :
-                                        (word?.traduction[0] === letter && word?.language?.id === wordsLanguage?.id && wordsLanguage?.french && <div key={index}  className='w-full h-10 flex items-center odd:bg-slate-200 px-[2.5%] justify-between'>
-                                            <p className=' truncate font-montserrat capitalize w-3/4 sm:w-4/5 cursor-pointer'  onClick={() => { setSelectedWord(word); setIsOpen(true) }} >
+                                        (word?.traduction[0] === letter && word?.language?.id === wordsLanguage?.id && wordsLanguage?.french && <div key={index} className='w-full h-10 flex items-center odd:bg-slate-200 px-[2.5%] justify-between'>
+                                            <p className=' truncate font-montserrat capitalize w-3/4 sm:w-4/5 cursor-pointer' onClick={() => { setSelectedWord(word); setIsOpen(true) }} >
                                                 {word?.traduction}</p>
-                                            <svg onClick={() => {setDeleteModal(true)}} className='text-primary z-20' width="20" height="20" viewBox="0 0 16 16"><path fill="currentColor" d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1l-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" /></svg>
+                                            <div className='flex items-center gap-5'>
+                                                <Crayon onClick={() => { setEditModal(true); setSelectedWord(word) }} className="text-primary cursor-pointer" />
+                                                <svg onClick={() => { setDeleteModal(true); setSelectedWord(word) }} className='text-primary cursor-pointer z-10' width="20" height="20" viewBox="0 0 16 16"><path fill="currentColor" d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1l-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" /></svg>
+                                            </div>
                                         </div>
                                         )
                                 ))}
@@ -238,16 +248,48 @@ export default function Home() {
                     ))}
                 </div>
                 <Card item={selectedWord} isOpen={isOpen} setIsOpen={setIsOpen} />
-                <ModalCard  isOpen={deleteModal} setIsOpen={setDeleteModal}>
+                <ModalCard isOpen={deleteModal} setIsOpen={setDeleteModal}>
                     <div className='w-full border-b border-primary pb-1'>
                         <p className='font-montserrat'>Supprimer : <strong>{selectedWord?.name} ?</strong></p>
                     </div>
                     <div className='flex items-center justify-around mt-4 '>
-                        <button onClick={() => {setDeleteModal(false); setSelectedWord("")}} className='cursor-pointer px-5 py-1 rounded-lg underline'>Non</button>
-                        <Button onClick={() => {deleteTheWord(selectedWord?.id)}}>Oui</Button>
+                        <button onClick={() => { setDeleteModal(false); setSelectedWord("") }} className='cursor-pointer px-5 py-1 rounded-lg underline'>Non</button>
+                        <Button onClick={() => { deleteTheWord(selectedWord?.id) }}>Oui</Button>
                     </div>
                 </ModalCard>
+                <ModalCard isOpen={editModal} setIsOpen={setEditModal}>
+                    <div className='w-full border-b-2 border-primary pb-1 mb-4'>
+                        <p className='font-montserrat font-bold text-center'>Edition</p>
+                    </div>
+                    <form onSubmit={(e) => { updateTheWord(e, selectedWord?.id, selectedWord?.name, selectedWord?.definition, selectedWord?.traduction, selectedWord?.languageId) }} className='w-full px-[2.5%]'>
+                    <div className="group w-full">
+                        <Input required onChange={(e) => setSelectedWord({...selectedWord, name: e.target.value})} defaultValue={selectedWord?.name} type="text" placeholder='Ajoutez un mot' />
+                    </div>
+                    <div className="group w-full mt-3">
+                        <Input onChange={(e) => setSelectedWord({...selectedWord, traduction: e.target.value})} defaultValue={selectedWord && selectedWord?.traduction} type="text" placeholder='Ajoutez sa traduction' />
+                    </div>
+                    <textarea onChange={(e) => setSelectedWord({...selectedWord, definition: e.target.value})} defaultValue={selectedWord?.definition}  placeholder="Donnez une définition, un mémo, n'importe quoi... (optionnel)" className='w-full mt-3 h-28 border border-primary resize-none outline-none rounded-md pl-3 pt-1.5' />
+                    <fieldset className='w-full flex items-center flex-wrap justify-between'>
+                        <div className='flex gap-2'>
+                            {languages?.map((item, index) => (
+                                <div key={index} onClick={() => { setSelectedWord({...selectedWord, languageId: item.id})}} className={`${selectedWord?.languageId === item?.id && "bg-primary"} cursor-pointer border border-primary px-5 py-1 rounded-lg mt-3`}>
+                                    <p className={`font-montserrat ${selectedWord?.languageId === item?.id && "text-white"}`}>{item.name}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </fieldset>
+                    <div className='flex justify-end w-full gap-5 items-center mt-4'>
+
+                    <button type='button' onClick={() => { setEditModal(false); setSelectedWord("") }} className='cursor-pointer px-5 py-1 rounded-lg underline'>Annuler</button>
+                        <Button type="submit">Confirmer</Button>
+                    </div>
+                </form>
+                    
+                </ModalCard>
+
             </main>
         </>
     );
 }
+
+

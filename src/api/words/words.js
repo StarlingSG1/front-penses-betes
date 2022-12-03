@@ -25,6 +25,7 @@ export async function deleteWord(payload) {
 }
 
 export async function updateWord(payload) {
+    console.log(payload)
     const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_LOCALURL}/words/update`,
         payload
