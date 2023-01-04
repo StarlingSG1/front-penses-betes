@@ -7,7 +7,7 @@ import { PensesBetes } from "../../atoms/Text/PensesBetes";
 
 export function Header() {
 
-  const { user, open, setOpen, setActiveId } = useUserContext();
+  const { user, open, setOpen } = useUserContext();
 
   return (
     <header className={`w-full h-[60px] z-50 px-6 small:px-0 bg-black flex justify-center`}>

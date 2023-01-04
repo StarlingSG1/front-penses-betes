@@ -10,7 +10,7 @@ import { AuthInput } from "../components/atoms/Input/AuthInput";
 
 export default function Login() {
 
-    const { loading, loginTheUser = () => { }, setLoading, noLogged, setHeadActive } = useUserContext();
+    const { loading, loginTheUser = () => { }, setLoading, noLogged, setHeadActive, setOpen } = useUserContext();
     const [userCredentials, setUserCredentials] = useState({
         email: "",
         password: "",
@@ -31,7 +31,9 @@ export default function Login() {
         setLoading(false);
     }
 
-    useEffect(() => { setLoading(false); setHeadActive(2) }, [])
+    useEffect(() => { setLoading(false); setHeadActive(2);
+        setOpen(false)
+    }, [])
 
     return (
         <Template>

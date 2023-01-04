@@ -10,7 +10,7 @@ import { AuthInput } from "../components/atoms/Input/AuthInput";
 
 export default function Register() {
 
-    const { user, setHeadActive } = useUserContext();
+    const { user, setHeadActive, setOpen } = useUserContext();
 
     const [userCredentials, setUserCredentials] = useState({
         firstName: "",
@@ -48,14 +48,15 @@ export default function Register() {
     }
 
     useEffect(() => {
-        setHeadActive(3)
+        setHeadActive(3);
+        setOpen(false)
     }, [])
 
-    
+
     return (
         <Template>
             <Title className="mb-10 sm:mb-[60px]">Inscription</Title>
-            <form onSubmit={registerTheUser} className="flex flex-col w-full gap-[15px]">
+            <form onSubmit={registerTheUser} className="flex flex-col w-full gap-[15px] mb-20 sm:mb-0">
                 <div className="flex sm:flex-row flex-col gap-[15px] sm:gap-5">
                     <AuthInput onChange={(e) => setUserCredentials({ ...userCredentials, firstName: e.target.value })} placeholder={"Prénom"} />
                     <AuthInput onChange={(e) => setUserCredentials({ ...userCredentials, lastName: e.target.value })} placeholder={"Nom"} />

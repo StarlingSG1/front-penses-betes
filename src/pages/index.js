@@ -13,7 +13,7 @@ import { useUserContext } from '../context';
 
 export default function Home() {
 
-    const { setHeadActive, open } = useUserContext();
+    const { setHeadActive, open, setOpen } = useUserContext();
     const [selectedWord, setSelectedWord] = useState('');
     const [words, setWords] = useState([]);
     const [languages, setLanguages] = useState([]);
@@ -42,6 +42,7 @@ export default function Home() {
         getWords();
         getTheLanguages();
         setHeadActive(1)
+        setOpen(false)
     }, []);
 
     return (
