@@ -10,6 +10,8 @@ const UserContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [status, setStatus] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [headActive, setHeadActive] = useState(0);
+    const [open, setOpen] = useState(false);
 
     const loginTheUser = async (payload, token) => {
         setLoading(true);
@@ -44,6 +46,17 @@ const UserContextProvider = ({ children }) => {
         verifyTheToken();
     }, []);
 
+    useEffect(() => {
+        if(window.location.pathname === null) 
+        setHeadActive(1)
+        else if(window.location.pathname === "/login")
+        setHeadActive(2)
+        else if(window.location.pathname === "/register")
+        setHeadActive(3)
+        else if(window.location.pathname === "/account")
+        setHeadActive(2)
+    }, [window.location])
+
     const stateValues = useMemo(
         () => ({
             user,
@@ -54,8 +67,12 @@ const UserContextProvider = ({ children }) => {
             status,
             verifyTheToken,
             setStatus,
+            headActive,
+            setHeadActive,
+            open,
+            setOpen
         }),
-        [user, setUser, , loading, setLoading, loginTheUser, status, verifyTheToken, setStatus]
+        [user, setUser, headActive, open, setOpen, setHeadActive, loading, setLoading, loginTheUser, status, verifyTheToken, setStatus]
     );
 
     return (

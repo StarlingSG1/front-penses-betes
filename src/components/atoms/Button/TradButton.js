@@ -1,0 +1,14 @@
+import { useEffect } from "react";
+import joinClasses from "../../../helpers/joinClasses";
+import { Paragraph } from "../Text/Paragraph";
+
+export function TradButton({ className = "", children, onClick, active = false, reverse = false }) {
+
+    return (
+        <div className={joinClasses(className, `${active ? "bg-gradient-to-r from-blue to-pink" : "bg-black dark:bg-white hover:bg-gradient-to-r hover:from-blue hover:to-pink "} group cursor-pointer truncate flex capitalize items-center justify-between  text-white px-4 rounded-lg grid-span-1 py-2 gap-2`)} onClick={onClick}><Paragraph className={`!text-white dark:!text-black truncate ${active ? "!text-white dark:!text-white" : "group-hover:dark:!text-white"}`}>{reverse ? "Français / " + children : children + " / Français"}</Paragraph>
+            <svg width="21" height="16" className={`fill-white dark:fill-black ${active ? "dark:!fill-white" : "group-hover:dark:!fill-white" }`} viewBox="0 0 21 16" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.832 9.37611L10.088 5.58352C9.984 5.47817 9.91051 5.36405 9.86752 5.24114C9.82384 5.11823 9.802 4.98654 9.802 4.84608C9.802 4.70561 9.82384 4.57392 9.86752 4.45102C9.91051 4.32811 9.984 4.21398 10.088 4.10863L13.832 0.316048C14.04 0.105349 14.2827 0 14.56 0C14.8373 0 15.08 0.105349 15.288 0.316048C15.496 0.526747 15.6 0.776777 15.6 1.06614C15.6 1.3562 15.496 1.60658 15.288 1.81728L13.338 3.79258H19.76C20.0547 3.79258 20.3015 3.89337 20.5005 4.09494C20.7002 4.29721 20.8 4.54759 20.8 4.84608C20.8 5.14457 20.7002 5.3946 20.5005 5.59617C20.3015 5.79844 20.0547 5.89957 19.76 5.89957H13.338L15.288 7.87488C15.496 8.08558 15.6 8.33139 15.6 8.61232C15.6 8.89325 15.496 9.13907 15.288 9.34977C15.08 9.56047 14.8418 9.6746 14.5735 9.69216C14.3045 9.70971 14.0573 9.60436 13.832 9.37611V9.37611ZM5.512 15.6707C5.72 15.8814 5.96267 15.991 6.24 15.9994C6.51733 16.0086 6.76 15.9078 6.968 15.6971L10.712 11.9045C10.816 11.7991 10.8898 11.685 10.9335 11.5621C10.9765 11.4392 10.998 11.3075 10.998 11.167C10.998 11.0266 10.9765 10.8949 10.9335 10.772C10.8898 10.6491 10.816 10.535 10.712 10.4296L6.968 6.63702C6.76 6.42632 6.51733 6.32097 6.24 6.32097C5.96267 6.32097 5.72 6.42632 5.512 6.63702C5.304 6.84772 5.2 7.09775 5.2 7.38711C5.2 7.67717 5.304 7.92755 5.512 8.13825L7.462 10.1136H1.04C0.745333 10.1136 0.498507 10.2143 0.29952 10.4159C0.0998401 10.6182 0 10.8686 0 11.167C0 11.4655 0.0998401 11.7156 0.29952 11.9171C0.498507 12.1194 0.745333 12.2205 1.04 12.2205H7.462L5.512 14.1958C5.304 14.4065 5.2 14.6524 5.2 14.9333C5.2 15.2142 5.304 15.46 5.512 15.6707V15.6707Z" />
+            </svg>
+        </div>
+    )
+}

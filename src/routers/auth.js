@@ -15,7 +15,7 @@ import Logout from "../pages/logout.page";
       <BrowserRouter>
         <Routes>
           <Route path="" element={<Home />} />
-          {/* <Route path="/profile" element={<Profile />} /> */}
+          {/* <Route path="/account" element={<Profile />} /> */}
           <Route path="/logout" element={<Logout />} />
         </Routes>
       </BrowserRouter>
