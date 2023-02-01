@@ -15,10 +15,10 @@ import Logout from "../pages/logout.page";
       <BrowserRouter>
         <Routes>
           <Route path="" element={<Home />} />
+          <Route path="/add"  element={<Home props={true} />} />
           {/* <Route path="/account" element={<Profile />} /> */}
           <Route path="/logout" element={<Logout />} />
         </Routes>
       </BrowserRouter>
     );
   }
-  

@@ -14,6 +14,7 @@ export default function Login() {
     const [userCredentials, setUserCredentials] = useState({
         email: "",
         password: "",
+        remember: false
     });
 
     const navigate = useNavigate();
@@ -42,8 +43,8 @@ export default function Login() {
                 <AuthInput onChange={(e) => setUserCredentials({ ...userCredentials, email: e.target.value })} type="email" placeholder="Adresse email" />
                 <AuthInput onChange={(e) => setUserCredentials({ ...userCredentials, password: e.target.value })} type="password" placeholder="Mot de passe" />
                 <div className="flex sm:flex-row flex-col sm:justify-between gap-[15px]">
-                    <div className="flex items-center gap-2.5">
-                        <input type="checkbox" className="border bg-transparent" />
+                    <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => setUserCredentials({...userCredentials, remember: !userCredentials.remember })}>
+                        <input type="checkbox" checked={userCredentials.remember} className="border bg-transparent" />
                         <Paragraph>Se souvenir de moi</Paragraph>
                     </div>
                     <TextLink>mot de passe oublié</TextLink>
