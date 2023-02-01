@@ -31,7 +31,6 @@ export function AddWord({ languages, setLanguages, setWords }) {
 
     const addANewWord = async (e) => {
         e.preventDefault();
-        console.log(word)
         const response = await createWord(word);
         if (response.error === false) {
             setWord({

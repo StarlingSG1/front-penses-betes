@@ -20,7 +20,6 @@ export function WordsList({ words, setStatus, selectedWord, setSelectedWord, sel
             });
             newLanguages[index].active = true;
             setLanguagesList(newLanguages);
-            console.log(newLanguages)
             setSelectedLanguageList(newLanguages[index]);
         } else {
             const newLanguages = languagesList.map((item) => {
@@ -45,7 +44,6 @@ export function WordsList({ words, setStatus, selectedWord, setSelectedWord, sel
     }
 
     const selectWord = (word) => {
-        console.log(word)
         setSelectedWord(word);
         setStatus("edit");
     }

@@ -23,7 +23,6 @@ export default function Login() {
         e.preventDefault();
         setLoading(true);
         const response = await loginTheUser(userCredentials)
-        console.log(response);
         if (!response.error) {
             navigate("/")
         } else {
